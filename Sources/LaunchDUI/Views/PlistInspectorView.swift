@@ -5,27 +5,57 @@ struct PlistInspectorView: View {
     let value: PlistValue
     @State private var selectedTab: Tab = .tree
 
-    enum Tab: String, CaseIterable {
-        case tree = "Tree"
-        case source = "Source"
+    enum Tab: CaseIterable {
+        case tree
+        case source
+
+        var label: String {
+            switch self {
+            case .tree: "Tree"
+            case .source: "Source"
+            }
+        }
+
+        var icon: String {
+            switch self {
+            case .tree: "list.bullet.indent"
+            case .source: "chevron.left.forwardslash.chevron.right"
+            }
+        }
     }
 
     var body: some View {
         VStack(spacing: 0) {
-            picker
-            Divider()
+            tabBar
             tabContent
         }
     }
 
-    private var picker: some View {
-        Picker("View", selection: $selectedTab) {
-            ForEach(Tab.allCases, id: \.self) { tab in
-                Text(tab.rawValue).tag(tab)
+    private var tabBar: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 12) {
+                ForEach(Tab.allCases, id: \.self) { tab in
+                    Button {
+                        selectedTab = tab
+                    } label: {
+                        Label(tab.label, systemImage: tab.icon)
+                            .font(.subheadline)
+                            .fontWeight(selectedTab == tab ? .semibold : .regular)
+                            .foregroundStyle(selectedTab == tab ? .primary : .secondary)
+                            .padding(.horizontal, 4)
+                            .padding(.vertical, 6)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                }
+                Spacer()
             }
+            .padding(.horizontal, 12)
+
+            Rectangle()
+                .fill(Color.accentColor)
+                .frame(height: 1.5)
         }
-        .pickerStyle(.segmented)
-        .padding(8)
     }
 
     @ViewBuilder
