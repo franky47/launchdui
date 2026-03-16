@@ -137,20 +137,29 @@ private struct CommandRow: View {
                 .foregroundStyle(.secondary)
                 .frame(width: 55, alignment: .trailing)
 
-            Text(command)
-                .font(.system(.subheadline, design: .monospaced))
-                .textSelection(.enabled)
-                .lineLimit(1)
+            HStack(spacing: 0) {
+                Text(command)
+                    .font(.system(.subheadline, design: .monospaced))
+                    .textSelection(.enabled)
+                    .lineLimit(1)
 
-            Button {
-                NSPasteboard.general.clearContents()
-                NSPasteboard.general.setString(command, forType: .string)
-            } label: {
-                Image(systemName: "doc.on.doc")
-                    .font(.subheadline)
+                Spacer()
+
+                Button {
+                    NSPasteboard.general.clearContents()
+                    NSPasteboard.general.setString(command, forType: .string)
+                } label: {
+                    Image(systemName: "doc.on.doc")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.borderless)
+                .help("Copy to clipboard")
             }
-            .buttonStyle(.borderless)
-            .help("Copy to clipboard")
+            .padding(.horizontal, 8)
+            .padding(.vertical, 5)
+            .background(.black.opacity(0.2))
+            .clipShape(RoundedRectangle(cornerRadius: 6))
         }
     }
 }
