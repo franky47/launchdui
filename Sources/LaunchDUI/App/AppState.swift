@@ -43,6 +43,7 @@ final class AppState {
         errorMessage = nil
         do {
             services = try await repository.loadAll()
+            await loadDetailForSelection()
         } catch {
             errorMessage = error.localizedDescription
         }
