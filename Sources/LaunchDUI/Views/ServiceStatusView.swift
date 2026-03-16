@@ -77,7 +77,15 @@ struct ServiceStatusView: View {
 
     private var commandsSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            SectionHeader(title: "Commands")
+            HStack(alignment: .firstTextBaseline) {
+                SectionHeader(title: "Commands")
+                Spacer()
+                if service.source.requiresSudo {
+                    Text("Requires sudo (system daemon)")
+                        .font(.subheadline)
+                        .foregroundStyle(.orange)
+                }
+            }
 
             let cmds = CommandGenerator.commands(for: service.label, source: service.source)
 
@@ -85,12 +93,6 @@ struct ServiceStatusView: View {
             CommandRow(action: "Stop", command: cmds.stop)
             CommandRow(action: "Enable", command: cmds.enable)
             CommandRow(action: "Disable", command: cmds.disable)
-
-            if service.source.requiresSudo {
-                Text("Requires sudo (system daemon)")
-                    .font(.subheadline)
-                    .foregroundStyle(.orange)
-            }
         }
     }
 }
