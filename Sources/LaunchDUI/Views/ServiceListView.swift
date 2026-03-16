@@ -10,11 +10,20 @@ struct ServiceListView: View {
     var body: some View {
         VStack(spacing: 0) {
             searchField
-            if !state.searchText.isEmpty && state.groupedServices.isEmpty {
+            statusFilterBar
+            scheduleFilterBar
+            Divider()
+            if state.groupedServices.isEmpty {
                 Spacer()
-                Text("No services matching \"\(state.searchText)\"")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                if !state.searchText.isEmpty {
+                    Text("No services matching \"\(state.searchText)\"")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text("No services matching filters")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
                 Spacer()
             } else {
                 serviceList
@@ -25,7 +34,60 @@ struct ServiceListView: View {
     private var searchField: some View {
         TextField("Search services...", text: $state.searchText)
             .textFieldStyle(.roundedBorder)
-            .padding(8)
+            .padding(.horizontal, 8)
+            .padding(.top, 8)
+            .padding(.bottom, 4)
+    }
+
+    private var statusFilterBar: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 6) {
+                ForEach(StatusFilter.allCases) { filter in
+                    if let count = state.statusCounts[filter] {
+                        FilterChip(
+                            label: filter.rawValue,
+                            count: count,
+                            color: filter.color,
+                            isActive: state.activeStatusFilters.contains(filter)
+                        ) {
+                            if state.activeStatusFilters.contains(filter) {
+                                state.activeStatusFilters.remove(filter)
+                            } else {
+                                state.activeStatusFilters.insert(filter)
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 2)
+        }
+    }
+
+    private var scheduleFilterBar: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 6) {
+                ForEach(ScheduleFilter.allCases) { filter in
+                    if let count = state.scheduleCounts[filter] {
+                        FilterChip(
+                            label: filter.rawValue,
+                            count: count,
+                            color: .secondary,
+                            icon: filter.icon,
+                            isActive: state.activeScheduleFilters.contains(filter)
+                        ) {
+                            if state.activeScheduleFilters.contains(filter) {
+                                state.activeScheduleFilters.remove(filter)
+                            } else {
+                                state.activeScheduleFilters.insert(filter)
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 2)
+        }
     }
 
     private var serviceList: some View {
@@ -71,5 +133,46 @@ struct ServiceListView: View {
                 }
             }
         )
+    }
+}
+
+private struct FilterChip: View {
+    let label: String
+    let count: Int
+    let color: Color
+    var icon: String? = nil
+    let isActive: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 4) {
+                if let icon {
+                    Image(systemName: icon)
+                        .font(.caption2)
+                        .foregroundStyle(isActive ? color : .secondary)
+                } else {
+                    Circle()
+                        .fill(color)
+                        .frame(width: 6, height: 6)
+                }
+
+                Text(label)
+                    .font(.caption)
+
+                Text("\(count)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(isActive ? color.opacity(0.2) : .clear)
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+            .overlay(
+                RoundedRectangle(cornerRadius: 6)
+                    .stroke(isActive ? color.opacity(0.5) : Color.secondary.opacity(0.3), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
     }
 }

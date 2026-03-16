@@ -37,3 +37,45 @@ enum ServiceSchedule: Sendable, Equatable {
         }
     }
 }
+
+/// Simplified schedule categories for filtering.
+enum ScheduleFilter: String, CaseIterable, Identifiable, Sendable {
+    case calendarInterval = "Calendar"
+    case interval = "Interval"
+    case watchPaths = "Watch Paths"
+    case keepAlive = "Keep Alive"
+    case onDemand = "On Demand"
+
+    var id: String { rawValue }
+
+    var icon: String {
+        switch self {
+        case .calendarInterval: "calendar"
+        case .interval: "timer"
+        case .watchPaths: "eye"
+        case .keepAlive: "arrow.clockwise"
+        case .onDemand: "hand.tap"
+        }
+    }
+
+    static func from(_ schedule: ServiceSchedule) -> ScheduleFilter {
+        switch schedule {
+        case .calendarInterval: .calendarInterval
+        case .interval: .interval
+        case .watchPaths: .watchPaths
+        case .keepAlive: .keepAlive
+        case .onDemand: .onDemand
+        }
+    }
+
+    func matches(_ schedule: ServiceSchedule) -> Bool {
+        switch (self, schedule) {
+        case (.calendarInterval, .calendarInterval): true
+        case (.interval, .interval): true
+        case (.watchPaths, .watchPaths): true
+        case (.keepAlive, .keepAlive): true
+        case (.onDemand, .onDemand): true
+        default: false
+        }
+    }
+}

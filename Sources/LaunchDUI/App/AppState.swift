@@ -6,21 +6,58 @@ final class AppState {
     var services: [LaunchdService] = []
     var selectedServiceID: String?
     var searchText: String = ""
+    var activeStatusFilters: Set<StatusFilter> = []
+    var activeScheduleFilters: Set<ScheduleFilter> = []
     var isLoading: Bool = false
     var errorMessage: String?
 
     private let repository = ServiceRepository()
 
-    /// Services grouped by source, filtered by search text.
+    /// Counts per status category across all services (unfiltered).
+    var statusCounts: [StatusFilter: Int] {
+        var counts: [StatusFilter: Int] = [:]
+        for filter in StatusFilter.allCases {
+            let count = services.count(where: { filter.matches($0.status) })
+            if count > 0 {
+                counts[filter] = count
+            }
+        }
+        return counts
+    }
+
+    /// Counts per schedule category across all services (unfiltered).
+    var scheduleCounts: [ScheduleFilter: Int] {
+        var counts: [ScheduleFilter: Int] = [:]
+        for filter in ScheduleFilter.allCases {
+            let count = services.count(where: { filter.matches($0.schedule) })
+            if count > 0 {
+                counts[filter] = count
+            }
+        }
+        return counts
+    }
+
+    /// Services grouped by source, filtered by search text, status, and schedule filters.
     var groupedServices: [(source: ServiceSource, services: [LaunchdService])] {
-        let filtered: [LaunchdService]
-        if searchText.isEmpty {
-            filtered = services
-        } else {
+        var filtered = services
+
+        if !searchText.isEmpty {
             let query = searchText.lowercased()
-            filtered = services.filter {
+            filtered = filtered.filter {
                 $0.label.lowercased().contains(query) ||
                 $0.displayName.lowercased().contains(query)
+            }
+        }
+
+        if !activeStatusFilters.isEmpty {
+            filtered = filtered.filter { service in
+                activeStatusFilters.contains { $0.matches(service.status) }
+            }
+        }
+
+        if !activeScheduleFilters.isEmpty {
+            filtered = filtered.filter { service in
+                activeScheduleFilters.contains { $0.matches(service.schedule) }
             }
         }
 

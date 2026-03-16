@@ -67,3 +67,41 @@ enum StatusIndicatorStyle: Sendable {
     case slashed
     case outline
 }
+
+/// Simplified status categories for filtering (collapses associated values).
+enum StatusFilter: String, CaseIterable, Identifiable, Sendable {
+    case running = "Running"
+    case waiting = "Waiting"
+    case stopped = "Stopped"
+    case error = "Error"
+    case killed = "Killed"
+    case disabled = "Disabled"
+    case notLoaded = "Not Loaded"
+
+    var id: String { rawValue }
+
+    var color: Color {
+        switch self {
+        case .running: .green
+        case .waiting: .blue
+        case .stopped: .gray
+        case .error: .red
+        case .killed: .orange
+        case .disabled: .gray
+        case .notLoaded: .gray
+        }
+    }
+
+    func matches(_ status: ServiceStatus) -> Bool {
+        switch (self, status) {
+        case (.running, .running): true
+        case (.waiting, .waiting): true
+        case (.stopped, .stopped): true
+        case (.error, .error): true
+        case (.killed, .killed): true
+        case (.disabled, .disabled): true
+        case (.notLoaded, .notLoaded): true
+        default: false
+        }
+    }
+}

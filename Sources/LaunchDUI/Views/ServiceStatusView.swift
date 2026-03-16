@@ -70,8 +70,12 @@ struct ServiceStatusView: View {
     private var scheduleSection: some View {
         VStack(alignment: .leading, spacing: 6) {
             SectionHeader(title: "Schedule")
-            Text(ScheduleFormatter.format(service.schedule))
-                .font(.callout)
+            Label(
+                ScheduleFormatter.format(service.schedule),
+                systemImage: ScheduleFilter.from(service.schedule).icon
+            )
+            .font(.callout)
+            .textSelection(.enabled)
         }
     }
 
