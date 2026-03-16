@@ -6,7 +6,8 @@
       "Read(//Library/LaunchAgents/**)",
       "Read(//Library/LaunchDaemons/**)",
       "Bash(plutil:*)",
-      "Bash(launchctl print:*)"
+      "Bash(launchctl print:*)",
+      "Bash(swift test:*)"
     ]
   }
 }
