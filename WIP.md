@@ -1,4 +1,4 @@
-# LaunchDUI - Work In Progress
+# LaunchdUI - Work In Progress
 
 ## Phase 1: Data Layer
 
@@ -37,7 +37,7 @@
 ## Phase 2: UI
 
 ### 2.1 App Shell
-- [x] `LaunchDUIApp.swift` — @main SwiftUI app entry
+- [x] `LaunchdUIApp.swift` — @main SwiftUI app entry
 - [x] `ContentView.swift` — HSplitView/VSplitView layout
 - [x] `AppState.swift` — @Observable state container
 

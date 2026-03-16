@@ -1,5 +1,5 @@
 import Testing
-@testable import LaunchDUI
+@testable import LaunchdUI
 
 @Suite("LaunchctlDisabledParser")
 struct LaunchctlDisabledParserTests {

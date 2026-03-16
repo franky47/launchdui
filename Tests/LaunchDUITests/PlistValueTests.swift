@@ -1,6 +1,6 @@
 import Testing
 import Foundation
-@testable import LaunchDUI
+@testable import LaunchdUI
 
 @Suite("PlistValue")
 struct PlistValueTests {

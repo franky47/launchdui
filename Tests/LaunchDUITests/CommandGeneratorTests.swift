@@ -1,6 +1,6 @@
 import Testing
 import Darwin
-@testable import LaunchDUI
+@testable import LaunchdUI
 
 @Suite("CommandGenerator")
 struct CommandGeneratorTests {

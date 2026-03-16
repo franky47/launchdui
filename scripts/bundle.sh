@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-APP_NAME="LaunchDUI"
+APP_NAME="LaunchdUI"
 BUNDLE_ID="dev.launchdui.app"
 BUILD_DIR=".build/release"
 APP_BUNDLE="$BUILD_DIR/$APP_NAME.app"

@@ -1,4 +1,4 @@
-# LaunchDUI Project Instructions
+# LaunchdUI Project Instructions
 
 ## WIP Tracking
 - After implementing any task, update `WIP.md` to mark it complete (`[x]`) and update the "Current Focus" section.
@@ -19,4 +19,4 @@
 
 ## Testing
 - Parser tests use fixture strings (captured real output).
-- Tests live in `Tests/LaunchDUITests/`.
+- Tests live in `Tests/LaunchdUITests/`.

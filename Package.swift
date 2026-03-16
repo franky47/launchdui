@@ -3,17 +3,17 @@
 import PackageDescription
 
 let package = Package(
-    name: "LaunchDUI",
+    name: "LaunchdUI",
     platforms: [.macOS(.v15)],
     targets: [
         .executableTarget(
-            name: "LaunchDUI",
-            path: "Sources/LaunchDUI"
+            name: "LaunchdUI",
+            path: "Sources/LaunchdUI"
         ),
         .testTarget(
-            name: "LaunchDUITests",
-            dependencies: ["LaunchDUI"],
-            path: "Tests/LaunchDUITests"
+            name: "LaunchdUITests",
+            dependencies: ["LaunchdUI"],
+            path: "Tests/LaunchdUITests"
         ),
     ]
 )

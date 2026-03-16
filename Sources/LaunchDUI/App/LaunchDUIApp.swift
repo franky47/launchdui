@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct LaunchDUIApp: App {
+struct LaunchdUIApp: App {
     @State private var state = AppState()
 
     var body: some Scene {

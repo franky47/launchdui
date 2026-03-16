@@ -1,4 +1,4 @@
-# LaunchDUI - macOS LaunchD Service Viewer
+# LaunchdUI - macOS LaunchD Service Viewer
 
 ## Context
 
@@ -29,11 +29,11 @@ Native SwiftUI app, built as a Swift Package (no Xcode project needed). Swift 6 
 ### File Structure
 
 ```
-LaunchDUI/
+LaunchdUI/
 ├── Package.swift
-├── Sources/LaunchDUI/
+├── Sources/LaunchdUI/
 │   ├── App/
-│   │   ├── LaunchDUIApp.swift          # @main SwiftUI app entry
+│   │   ├── LaunchdUIApp.swift          # @main SwiftUI app entry
 │   │   └── AppState.swift              # @Observable state container
 │   ├── Models/
 │   │   ├── LaunchdService.swift        # Core domain model
@@ -154,7 +154,7 @@ Commands
 7. `ServiceRepository` — merge all data sources
 
 ### Phase 2: UI
-8. `LaunchDUIApp.swift` + `ContentView.swift` — app entry + HSplitView/VSplitView layout
+8. `LaunchdUIApp.swift` + `ContentView.swift` — app entry + HSplitView/VSplitView layout
 9. `AppState.swift` — observable state
 10. `ServiceListView` + `ServiceRow` + `StatusIndicator` — left column
 11. `DetailPanelView` + `ServiceStatusView` — right top
@@ -170,7 +170,7 @@ Commands
 ## Verification
 
 1. `swift build` — must compile without errors
-2. `swift run LaunchDUI` — launches the app window
+2. `swift run LaunchdUI` — launches the app window
 3. Service list shows real services with correct status indicators (green/gray)
 4. Selecting a service populates the right panels
 5. Service status panel shows info, metadata, schedule, and copyable commands
