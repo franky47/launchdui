@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(launchctl list:*)",
+      "Read(//Users/franky/Library/LaunchAgents/**)",
+      "Read(//Library/LaunchAgents/**)",
+      "Read(//Library/LaunchDaemons/**)",
+      "Bash(plutil:*)",
+      "Bash(launchctl print:*)"
+    ]
+  }
+}
