@@ -25,7 +25,7 @@
 - [x] `ServiceRepository.swift` — Merge plist + runtime data
 - [x] `CommandGenerator.swift` — Generate copyable launchctl command strings
 
-### 1.5 Tests (63 tests, all passing)
+### 1.5 Tests (68 tests, all passing)
 - [x] Parser tests with fixture data (LaunchctlListParser, DisabledParser, PrintParser)
 - [x] ScheduleFormatter tests
 - [x] PlistValue tests
@@ -37,21 +37,21 @@
 ## Phase 2: UI
 
 ### 2.1 App Shell
-- [ ] `LaunchDUIApp.swift` — @main SwiftUI app entry (placeholder exists)
-- [ ] `ContentView.swift` — HSplitView/VSplitView layout
-- [ ] `AppState.swift` — @Observable state container
+- [x] `LaunchDUIApp.swift` — @main SwiftUI app entry
+- [x] `ContentView.swift` — HSplitView/VSplitView layout
+- [x] `AppState.swift` — @Observable state container
 
 ### 2.2 Left Column
-- [ ] `ServiceListView.swift` — Filterable service list grouped by source
-- [ ] `ServiceRow.swift` — Row: name, label, status indicator
-- [ ] `StatusIndicator.swift` — Color-coded status circles
+- [x] `ServiceListView.swift` — Filterable service list grouped by source
+- [x] `ServiceRow.swift` — Row: name, label, status indicator
+- [x] `StatusIndicator.swift` — Color-coded status circles
 
 ### 2.3 Right Column
-- [ ] `DetailPanelView.swift` — Top/bottom vertical split
-- [ ] `ServiceStatusView.swift` — Info, metadata, schedule, status, commands
-- [ ] `PlistInspectorView.swift` — Tabbed plist viewer container
-- [ ] `PlistTreeView.swift` — Tree tab: hierarchical DisclosureGroup
-- [ ] `PlistSourceView.swift` — Source tab: raw XML monospaced text
+- [x] `DetailPanelView.swift` — Top/bottom vertical split
+- [x] `ServiceStatusView.swift` — Info, metadata, schedule, status, commands
+- [x] `PlistInspectorView.swift` — Tabbed plist viewer container
+- [x] `PlistTreeView.swift` — Tree tab: hierarchical DisclosureGroup
+- [x] `PlistSourceView.swift` — Source tab: raw XML monospaced text
 
 ---
 
@@ -65,4 +65,4 @@
 ---
 
 ## Current Focus
-**Phase 1: COMPLETE.** Ready for review before starting Phase 2 (UI).
+**Phase 2: COMPLETE.** Ready for review before starting Phase 3 (Polish).

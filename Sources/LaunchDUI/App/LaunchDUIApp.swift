@@ -2,10 +2,12 @@ import SwiftUI
 
 @main
 struct LaunchDUIApp: App {
+    @State private var state = AppState()
+
     var body: some Scene {
         WindowGroup {
-            Text("LaunchDUI — Coming Soon")
-                .frame(width: 800, height: 600)
+            ContentView(state: state)
         }
+        .defaultSize(width: 1000, height: 700)
     }
 }
