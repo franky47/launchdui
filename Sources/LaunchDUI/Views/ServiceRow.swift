@@ -10,12 +10,12 @@ struct ServiceRow: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(service.displayName)
-                    .font(.body)
+                    .font(.callout)
                     .fontWeight(.medium)
                     .lineLimit(1)
 
                 Text(service.label)
-                    .font(.caption)
+                    .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }
@@ -23,7 +23,7 @@ struct ServiceRow: View {
             Spacer()
 
             Text(service.status.displayName)
-                .font(.caption2)
+                .font(.subheadline)
                 .fontWeight(.medium)
                 .foregroundStyle(service.status.statusColor)
         }

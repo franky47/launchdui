@@ -21,20 +21,22 @@ struct ServiceStatusView: View {
 
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: 4) {
-            HStack(spacing: 8) {
+            HStack(spacing: 6) {
+                Text(service.label)
+                    .font(.headline)
+                    .textSelection(.enabled)
+
+                Spacer()
+
                 StatusIndicator(status: service.status)
                 Text(service.status.displayName)
-                    .font(.headline)
+                    .font(.callout)
+                    .fontWeight(.medium)
                     .foregroundStyle(service.status.statusColor)
             }
 
-            Text(service.label)
-                .font(.title3)
-                .fontWeight(.semibold)
-                .textSelection(.enabled)
-
             Text(service.source.displayName)
-                .font(.caption)
+                .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
     }
@@ -43,19 +45,19 @@ struct ServiceStatusView: View {
         VStack(alignment: .leading, spacing: 6) {
             SectionHeader(title: "Info")
 
+            MetadataRow(label: "Plist", value: service.plistPath)
+
             if let program = service.program {
                 MetadataRow(label: "Program", value: program)
             }
 
-            if let args = service.programArguments, !args.isEmpty {
-                MetadataRow(label: "Arguments", value: args.joined(separator: " "))
+            if let args = service.programArguments, args.count > 1 {
+                MetadataRow(label: "Arguments", value: args.dropFirst().joined(separator: "\n"))
             }
 
             if case .running(let pid) = service.status {
                 MetadataRow(label: "PID", value: String(pid))
             }
-
-            MetadataRow(label: "Plist", value: service.plistPath)
 
             if let detail = service.detailedInfo {
                 ForEach(Array(detail.sorted(by: { $0.key < $1.key })), id: \.key) { key, value in
@@ -69,7 +71,7 @@ struct ServiceStatusView: View {
         VStack(alignment: .leading, spacing: 6) {
             SectionHeader(title: "Schedule")
             Text(ScheduleFormatter.format(service.schedule))
-                .font(.body)
+                .font(.callout)
         }
     }
 
@@ -86,7 +88,7 @@ struct ServiceStatusView: View {
 
             if service.source.requiresSudo {
                 Text("Requires sudo (system daemon)")
-                    .font(.caption)
+                    .font(.subheadline)
                     .foregroundStyle(.orange)
             }
         }
@@ -100,7 +102,7 @@ private struct SectionHeader: View {
 
     var body: some View {
         Text(title)
-            .font(.subheadline)
+            .font(.callout)
             .fontWeight(.semibold)
             .foregroundStyle(.secondary)
     }
@@ -113,14 +115,13 @@ private struct MetadataRow: View {
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
             Text(label)
-                .font(.caption)
+                .font(.subheadline)
                 .foregroundStyle(.secondary)
-                .frame(width: 80, alignment: .trailing)
+                .frame(width: 90, alignment: .trailing)
 
             Text(value)
-                .font(.caption)
+                .font(.subheadline)
                 .textSelection(.enabled)
-                .lineLimit(3)
         }
     }
 }
@@ -132,12 +133,12 @@ private struct CommandRow: View {
     var body: some View {
         HStack(spacing: 8) {
             Text(action)
-                .font(.caption)
+                .font(.subheadline)
                 .foregroundStyle(.secondary)
-                .frame(width: 50, alignment: .trailing)
+                .frame(width: 55, alignment: .trailing)
 
             Text(command)
-                .font(.system(.caption, design: .monospaced))
+                .font(.system(.subheadline, design: .monospaced))
                 .textSelection(.enabled)
                 .lineLimit(1)
 
@@ -146,7 +147,7 @@ private struct CommandRow: View {
                 NSPasteboard.general.setString(command, forType: .string)
             } label: {
                 Image(systemName: "doc.on.doc")
-                    .font(.caption)
+                    .font(.subheadline)
             }
             .buttonStyle(.borderless)
             .help("Copy to clipboard")

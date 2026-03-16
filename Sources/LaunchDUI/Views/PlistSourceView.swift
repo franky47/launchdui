@@ -7,7 +7,7 @@ struct PlistSourceView: View {
     var body: some View {
         ScrollView([.horizontal, .vertical]) {
             Text(xmlSource)
-                .font(.system(.body, design: .monospaced))
+                .font(.system(.subheadline, design: .monospaced))
                 .textSelection(.enabled)
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .leading)

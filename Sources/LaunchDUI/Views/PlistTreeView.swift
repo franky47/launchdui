@@ -5,24 +5,21 @@ struct PlistTreeView: View {
     let value: PlistValue
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                switch value {
-                case .dictionary(let entries):
-                    ForEach(entries, id: \.key) { entry in
-                        PlistNodeView(key: entry.key, value: entry.value)
-                    }
-                case .array(let items):
-                    ForEach(Array(items.enumerated()), id: \.offset) { index, item in
-                        PlistNodeView(key: String(index), value: item)
-                    }
-                default:
-                    PlistLeafView(key: nil, value: value)
+        List {
+            switch value {
+            case .dictionary(let entries):
+                ForEach(entries, id: \.key) { entry in
+                    PlistNodeView(key: entry.key, value: entry.value, startExpanded: true)
                 }
+            case .array(let items):
+                ForEach(Array(items.enumerated()), id: \.offset) { index, item in
+                    PlistNodeView(key: String(index), value: item, startExpanded: true)
+                }
+            default:
+                PlistLeafView(key: nil, value: value)
             }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .listStyle(.plain)
     }
 }
 
@@ -30,11 +27,21 @@ struct PlistTreeView: View {
 private struct PlistNodeView: View {
     let key: String
     let value: PlistValue
+    let startExpanded: Bool
+
+    @State private var isExpanded: Bool
+
+    init(key: String, value: PlistValue, startExpanded: Bool = false) {
+        self.key = key
+        self.value = value
+        self.startExpanded = startExpanded
+        self._isExpanded = State(initialValue: startExpanded)
+    }
 
     var body: some View {
         switch value {
         case .dictionary(let entries):
-            DisclosureGroup {
+            DisclosureGroup(isExpanded: $isExpanded) {
                 ForEach(entries, id: \.key) { entry in
                     PlistNodeView(key: entry.key, value: entry.value)
                 }
@@ -42,7 +49,7 @@ private struct PlistNodeView: View {
                 nodeLabel
             }
         case .array(let items):
-            DisclosureGroup {
+            DisclosureGroup(isExpanded: $isExpanded) {
                 ForEach(Array(items.enumerated()), id: \.offset) { index, item in
                     PlistNodeView(key: String(index), value: item)
                 }
@@ -57,11 +64,11 @@ private struct PlistNodeView: View {
     private var nodeLabel: some View {
         HStack(spacing: 6) {
             Text(key)
-                .font(.system(.body, design: .monospaced))
+                .font(.system(.subheadline, design: .monospaced))
                 .fontWeight(.medium)
 
             Text(value.typeLabel)
-                .font(.caption2)
+                .font(.caption)
                 .padding(.horizontal, 4)
                 .padding(.vertical, 1)
                 .background(.quaternary)
@@ -79,19 +86,18 @@ private struct PlistLeafView: View {
         HStack(spacing: 6) {
             if let key {
                 Text(key)
-                    .font(.system(.body, design: .monospaced))
+                    .font(.system(.subheadline, design: .monospaced))
                     .foregroundStyle(.secondary)
             }
 
             if let preview = value.preview {
                 Text(preview)
-                    .font(.system(.body, design: .monospaced))
+                    .font(.system(.subheadline, design: .monospaced))
                     .foregroundStyle(valueColor)
                     .textSelection(.enabled)
                     .lineLimit(2)
             }
         }
-        .padding(.vertical, 1)
     }
 
     private var valueColor: Color {

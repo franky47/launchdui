@@ -31,7 +31,20 @@ struct ServiceListView: View {
                             .tag(service.id)
                     }
                 } label: {
-                    Text("\(group.source.displayName) (\(group.services.count))")
+                    HStack {
+                        Text("\(group.source.displayName) (\(group.services.count))")
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation {
+                            if expandedGroups.contains(group.source) {
+                                expandedGroups.remove(group.source)
+                            } else {
+                                expandedGroups.insert(group.source)
+                            }
+                        }
+                    }
                 }
             }
         }
