@@ -3,6 +3,7 @@ import SwiftUI
 /// Root view: two-column HSplitView with service list and detail panel.
 struct ContentView: View {
     @Bindable var state: AppState
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         HSplitView {
@@ -20,6 +21,17 @@ struct ContentView: View {
             Task {
                 await state.loadDetailForSelection()
             }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                Task { await state.refresh() }
+            }
+        }
+        .toolbar {
+            Button("Refresh") {
+                Task { await state.refresh() }
+            }
+            .keyboardShortcut("r", modifiers: .command)
         }
         .overlay(alignment: .top) {
             if state.isLoading {

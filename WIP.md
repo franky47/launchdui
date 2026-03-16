@@ -57,12 +57,12 @@
 
 ## Phase 3: Polish
 
-- [ ] Auto-refresh on window focus
-- [ ] Keyboard shortcut (Cmd+R for refresh)
-- [ ] Search/filter in the service list
-- [ ] Error handling (non-modal banners for read failures)
+- [x] Auto-refresh on window focus (scenePhase onChange)
+- [x] Keyboard shortcut (Cmd+R toolbar button)
+- [x] Search/filter in the service list (wired in Phase 2)
+- [x] Error handling (non-modal dismiss banner)
 
 ---
 
 ## Current Focus
-**Phase 2: COMPLETE.** Ready for review before starting Phase 3 (Polish).
+**All phases COMPLETE.** App is fully functional.
