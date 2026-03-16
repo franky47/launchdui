@@ -18,6 +18,11 @@ A native macOS app for browsing and inspecting `launchd` services. Built with Sw
 
 LaunchdUI never executes mutating `launchctl` commands. It only reads service data from plist files and `launchctl list` / `print` / `print-disabled`. Actionable commands are displayed as copyable strings for the user to run in their own terminal.
 
+## Prerequisites
+
+- macOS 15 (Sequoia) or later
+- Swift 6.0+ (included with Xcode 16+)
+
 ## Build & Run
 
 ```bash
