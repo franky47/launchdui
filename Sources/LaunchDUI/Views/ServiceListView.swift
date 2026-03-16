@@ -10,7 +10,15 @@ struct ServiceListView: View {
     var body: some View {
         VStack(spacing: 0) {
             searchField
-            serviceList
+            if !state.searchText.isEmpty && state.groupedServices.isEmpty {
+                Spacer()
+                Text("No services matching \"\(state.searchText)\"")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer()
+            } else {
+                serviceList
+            }
         }
     }
 
