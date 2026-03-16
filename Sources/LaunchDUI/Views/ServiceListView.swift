@@ -48,7 +48,8 @@ struct ServiceListView: View {
                 }
             }
         }
-        .listStyle(.sidebar)
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
     }
 
     private func bindingForGroup(_ source: ServiceSource) -> Binding<Bool> {
