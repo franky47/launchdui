@@ -9,10 +9,11 @@ struct CommandGenerator: Sendable {
         let stop: String
         let enable: String
         let disable: String
+        let remove: String
     }
 
     /// Generate all available commands for a service.
-    static func commands(for label: String, source: ServiceSource) -> Commands {
+    static func commands(for label: String, source: ServiceSource, plistPath: String) -> Commands {
         let domain = source.domainTarget
         let serviceTarget = "\(domain)/\(label)"
         let prefix = source.requiresSudo ? "sudo " : ""
@@ -21,7 +22,8 @@ struct CommandGenerator: Sendable {
             start: "\(prefix)launchctl kickstart \(serviceTarget)",
             stop: "\(prefix)launchctl bootout \(serviceTarget)",
             enable: "\(prefix)launchctl enable \(serviceTarget)",
-            disable: "\(prefix)launchctl disable \(serviceTarget)"
+            disable: "\(prefix)launchctl disable \(serviceTarget)",
+            remove: "\(prefix)rm \(plistPath)"
         )
     }
 }

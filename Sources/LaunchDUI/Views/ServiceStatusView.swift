@@ -87,12 +87,13 @@ struct ServiceStatusView: View {
                 }
             }
 
-            let cmds = CommandGenerator.commands(for: service.label, source: service.source)
+            let cmds = CommandGenerator.commands(for: service.label, source: service.source, plistPath: service.plistPath)
 
             CommandRow(action: "Start", command: cmds.start)
             CommandRow(action: "Stop", command: cmds.stop)
             CommandRow(action: "Enable", command: cmds.enable)
             CommandRow(action: "Disable", command: cmds.disable)
+            CommandRow(action: "Remove", command: cmds.remove, actionColor: .red)
         }
     }
 }
@@ -131,12 +132,13 @@ private struct MetadataRow: View {
 private struct CommandRow: View {
     let action: String
     let command: String
+    var actionColor: Color = .secondary
 
     var body: some View {
         HStack(spacing: 8) {
             Text(action)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(actionColor)
                 .frame(width: 55, alignment: .trailing)
 
             HStack(spacing: 0) {
