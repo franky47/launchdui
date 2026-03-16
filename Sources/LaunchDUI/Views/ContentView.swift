@@ -27,11 +27,12 @@ struct ContentView: View {
                 Task { await state.refresh() }
             }
         }
-        .toolbar {
-            Button("Refresh") {
+        .background {
+            Button("") {
                 Task { await state.refresh() }
             }
             .keyboardShortcut("r", modifiers: .command)
+            .hidden()
         }
         .overlay(alignment: .top) {
             if state.isLoading {
