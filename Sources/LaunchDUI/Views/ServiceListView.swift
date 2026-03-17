@@ -1,11 +1,43 @@
 import SwiftUI
 
+// MARK: - Row identity for flat list (headers + services in one selection model)
+
+enum ListRowID: Hashable {
+    case header(ServiceSource)
+    case service(String)
+}
+
+private enum FlatRow: Identifiable {
+    case header(source: ServiceSource, count: Int, isExpanded: Bool)
+    case service(LaunchdService)
+
+    var id: ListRowID {
+        switch self {
+        case .header(let source, _, _): .header(source)
+        case .service(let svc): .service(svc.id)
+        }
+    }
+}
+
 /// Left column: filterable, grouped service list.
 struct ServiceListView: View {
     @Bindable var state: AppState
     @State private var expandedGroups: Set<ServiceSource> = [
         .userAgent, .systemAgent, .systemDaemon
     ]
+    @State private var selectedRow: ListRowID?
+
+    private var flatRows: [FlatRow] {
+        var rows: [FlatRow] = []
+        for group in state.groupedServices {
+            let isExpanded = expandedGroups.contains(group.source)
+            rows.append(.header(source: group.source, count: group.services.count, isExpanded: isExpanded))
+            if isExpanded {
+                rows.append(contentsOf: group.services.map { .service($0) })
+            }
+        }
+        return rows
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -91,50 +123,109 @@ struct ServiceListView: View {
     }
 
     private var serviceList: some View {
-        List(selection: $state.selectedServiceID) {
-            ForEach(state.groupedServices, id: \.source) { group in
-                DisclosureGroup(
-                    isExpanded: bindingForGroup(group.source)
-                ) {
-                    ForEach(group.services) { service in
-                        ServiceRow(service: service)
-                            .tag(service.id)
-                    }
-                } label: {
-                    HStack {
-                        Text("\(group.source.displayName) (\(group.services.count))")
-                        Spacer()
-                    }
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        withAnimation {
-                            if expandedGroups.contains(group.source) {
-                                expandedGroups.remove(group.source)
-                            } else {
-                                expandedGroups.insert(group.source)
+        List(selection: $selectedRow) {
+            ForEach(flatRows) { row in
+                switch row {
+                case .header(let source, let count, let isExpanded):
+                    GroupHeaderRow(source: source, count: count, isExpanded: isExpanded)
+                        .tag(row.id)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+                        .onTapGesture {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                if expandedGroups.contains(source) {
+                                    expandedGroups.remove(source)
+                                } else {
+                                    expandedGroups.insert(source)
+                                }
                             }
                         }
-                    }
+
+                case .service(let service):
+                    ServiceRow(service: service)
+                        .tag(row.id)
                 }
             }
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
-    }
-
-    private func bindingForGroup(_ source: ServiceSource) -> Binding<Bool> {
-        Binding(
-            get: { expandedGroups.contains(source) },
-            set: { isExpanded in
-                if isExpanded {
-                    expandedGroups.insert(source)
-                } else {
-                    expandedGroups.remove(source)
-                }
+        .onChange(of: selectedRow) { _, newValue in
+            if case .service(let id) = newValue {
+                state.selectedServiceID = id
             }
-        )
+        }
+        .onKeyPress(.return) {
+            if case .header(let source) = selectedRow {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    if expandedGroups.contains(source) {
+                        expandedGroups.remove(source)
+                    } else {
+                        expandedGroups.insert(source)
+                    }
+                }
+                return .handled
+            }
+            return .ignored
+        }
+        .onKeyPress(.space) {
+            if case .header(let source) = selectedRow {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    if expandedGroups.contains(source) {
+                        expandedGroups.remove(source)
+                    } else {
+                        expandedGroups.insert(source)
+                    }
+                }
+                return .handled
+            }
+            return .ignored
+        }
+        .onKeyPress(.rightArrow) {
+            if case .header(let source) = selectedRow, !expandedGroups.contains(source) {
+                _ = withAnimation { expandedGroups.insert(source) }
+                return .handled
+            }
+            return .ignored
+        }
+        .onKeyPress(.leftArrow) {
+            if case .header(let source) = selectedRow, expandedGroups.contains(source) {
+                _ = withAnimation { expandedGroups.remove(source) }
+                return .handled
+            }
+            return .ignored
+        }
     }
 }
+
+// MARK: - Group Header Row
+
+private struct GroupHeaderRow: View {
+    let source: ServiceSource
+    let count: Int
+    let isExpanded: Bool
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "chevron.right")
+                .rotationEffect(.degrees(isExpanded ? 90 : 0))
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .frame(width: 10)
+                .animation(.easeInOut(duration: 0.2), value: isExpanded)
+
+            Text("\(source.displayName) (\(count))")
+                .fontWeight(.semibold)
+
+            Spacer()
+        }
+        .contentShape(Rectangle())
+        .accessibilityAddTraits(.isButton)
+        .accessibilityLabel("\(source.displayName), \(count) services")
+        .accessibilityHint(isExpanded ? "Double-tap to collapse" : "Double-tap to expand")
+    }
+}
+
+// MARK: - Filter Chip
 
 private struct FilterChip: View {
     let label: String
