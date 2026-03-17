@@ -130,7 +130,6 @@ struct ServiceListView: View {
                     GroupHeaderRow(source: source, count: count, isExpanded: isExpanded)
                         .tag(row.id)
                         .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
                         .onTapGesture {
                             withAnimation(.easeInOut(duration: 0.2)) {
                                 if expandedGroups.contains(source) {
@@ -205,12 +204,12 @@ private struct GroupHeaderRow: View {
     let isExpanded: Bool
 
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 8) {
             Image(systemName: "chevron.right")
                 .rotationEffect(.degrees(isExpanded ? 90 : 0))
-                .font(.caption2)
+                .font(.system(size: 8))
                 .foregroundStyle(.secondary)
-                .frame(width: 10)
+                .frame(width: 10, alignment: .center)
                 .animation(.easeInOut(duration: 0.2), value: isExpanded)
 
             Text("\(source.displayName) (\(count))")
@@ -218,6 +217,7 @@ private struct GroupHeaderRow: View {
 
             Spacer()
         }
+        .padding(.vertical, 2)
         .contentShape(Rectangle())
         .accessibilityAddTraits(.isButton)
         .accessibilityLabel("\(source.displayName), \(count) services")
