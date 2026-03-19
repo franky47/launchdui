@@ -66,8 +66,14 @@ struct PlistInspectorView: View {
                     } label: {
                         Label(tab.label, systemImage: tab.icon)
                             .font(.subheadline)
-                            .fontWeight(effectiveTab == tab ? .semibold : .regular)
-                            .foregroundStyle(effectiveTab == tab ? .primary : .secondary)
+                            .fontWeight(.semibold)
+                            .hidden()
+                            .overlay {
+                                Label(tab.label, systemImage: tab.icon)
+                                    .font(.subheadline)
+                                    .fontWeight(effectiveTab == tab ? .semibold : .regular)
+                                    .foregroundStyle(effectiveTab == tab ? .primary : .secondary)
+                            }
                             .padding(.horizontal, 4)
                             .padding(.vertical, 6)
                             .contentShape(Rectangle())
