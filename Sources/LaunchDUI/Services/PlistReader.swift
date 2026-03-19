@@ -63,6 +63,16 @@ struct PlistReader: Sendable {
         return .onDemand
     }
 
+    /// Extract the StandardOutPath from a plist dictionary.
+    static func extractStandardOutPath(from dict: [String: Any]) -> String? {
+        dict["StandardOutPath"] as? String
+    }
+
+    /// Extract the StandardErrorPath from a plist dictionary.
+    static func extractStandardErrorPath(from dict: [String: Any]) -> String? {
+        dict["StandardErrorPath"] as? String
+    }
+
     /// Extract the program path from a plist dictionary.
     static func extractProgram(from dict: [String: Any]) -> String? {
         if let program = dict["Program"] as? String {

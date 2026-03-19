@@ -64,5 +64,19 @@
 
 ---
 
+## Phase 4: Runtime Log Viewer
+
+- [x] Extract `StandardOutPath`/`StandardErrorPath` from plist to `LaunchdService` model
+- [x] `PlistReader` extraction methods with readability checks in `ServiceRepository`
+- [x] `LogTailer` — efficient backward file reading (last 500 lines) + live streaming via DispatchSource
+- [x] `LogTabView` — monospaced log display with auto-scroll (pauses on scroll-up)
+- [x] Conditional Logs/Errors tabs in `PlistInspectorView`
+- [x] Inline search with match highlighting
+- [x] Per-service tab memory via `DetailPanelView` binding
+- [x] LogTailer tests (initial read, streaming, cancellation)
+- [x] PlistReader extraction tests
+
+---
+
 ## Current Focus
 **All phases COMPLETE.** App is fully functional.

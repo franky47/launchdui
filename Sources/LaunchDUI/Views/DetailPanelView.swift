@@ -3,6 +3,7 @@ import SwiftUI
 /// Right column: top/bottom vertical split with service status and plist inspector.
 struct DetailPanelView: View {
     let service: LaunchdService?
+    @State private var tabSelections: [String: PlistInspectorView.Tab] = [:]
 
     var body: some View {
         if let service {
@@ -11,7 +12,13 @@ struct DetailPanelView: View {
                     .frame(minHeight: 200)
 
                 if let plist = service.plistContents {
-                    PlistInspectorView(value: plist)
+                    PlistInspectorView(
+                        value: plist,
+                        standardOutURL: service.standardOutPath.map { URL(fileURLWithPath: $0) },
+                        standardErrorURL: service.standardErrorPath.map { URL(fileURLWithPath: $0) },
+                        serviceID: service.id,
+                        tabSelections: $tabSelections
+                    )
                         .frame(minHeight: 200)
                 } else {
                     emptyPlistView

@@ -29,6 +29,12 @@ struct LaunchdService: Sendable, Identifiable {
     /// Detailed runtime info from `launchctl print` (loaded lazily).
     var detailedInfo: [String: String]?
 
+    /// Path to the stdout log file (only set if readable).
+    var standardOutPath: String?
+
+    /// Path to the stderr log file (only set if readable).
+    var standardErrorPath: String?
+
     var id: String { label }
 
     /// Human-friendly display name derived from the label.

@@ -121,6 +121,30 @@ struct PlistReaderTests {
         #expect(PlistReader.extractProgram(from: dict) == "/usr/bin/test")
     }
 
+    @Test("Extracts StandardOutPath")
+    func extractsStandardOutPath() {
+        let dict: [String: Any] = ["StandardOutPath": "/var/log/out.log"]
+        #expect(PlistReader.extractStandardOutPath(from: dict) == "/var/log/out.log")
+    }
+
+    @Test("Extracts StandardErrorPath")
+    func extractsStandardErrorPath() {
+        let dict: [String: Any] = ["StandardErrorPath": "/var/log/err.log"]
+        #expect(PlistReader.extractStandardErrorPath(from: dict) == "/var/log/err.log")
+    }
+
+    @Test("Returns nil when StandardOutPath is missing")
+    func missingStandardOutPath() {
+        let dict: [String: Any] = ["Label": "com.test"]
+        #expect(PlistReader.extractStandardOutPath(from: dict) == nil)
+    }
+
+    @Test("Returns nil when StandardErrorPath is missing")
+    func missingStandardErrorPath() {
+        let dict: [String: Any] = ["Label": "com.test"]
+        #expect(PlistReader.extractStandardErrorPath(from: dict) == nil)
+    }
+
     @Test("Generates XML source from PlistValue")
     func generatesXmlSource() throws {
         let value = PlistValue.dictionary([
