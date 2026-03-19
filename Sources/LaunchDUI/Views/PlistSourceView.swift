@@ -13,6 +13,7 @@ struct PlistSourceView: View {
                     .padding()
                     .frame(minWidth: geo.size.width, minHeight: geo.size.height, alignment: .topLeading)
             }
+            .background(Color(nsColor: .textBackgroundColor))
         }
     }
 

@@ -67,6 +67,7 @@ struct LogTabView: View {
                             }
                         }
                     }
+                    .background(Color(nsColor: .textBackgroundColor))
                 }
             }
         }
