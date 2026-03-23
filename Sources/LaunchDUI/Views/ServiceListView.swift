@@ -123,6 +123,7 @@ struct ServiceListView: View {
     }
 
     private var serviceList: some View {
+        ScrollViewReader { proxy in
         List(selection: $selectedRow) {
             ForEach(state.pinnedServices) { service in
                 ServiceRow(service: service, isPinned: true)
@@ -222,6 +223,14 @@ struct ServiceListView: View {
             }
             return .ignored
         }
+        .onChange(of: state.pinStore.pinnedLabels) { _, newLabels in
+            if let lastPinned = newLabels.last {
+                withAnimation {
+                    proxy.scrollTo(ListRowID.service(lastPinned))
+                }
+            }
+        }
+        } // ScrollViewReader
     }
 }
 
