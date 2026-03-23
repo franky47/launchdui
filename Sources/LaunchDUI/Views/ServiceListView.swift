@@ -135,6 +135,9 @@ struct ServiceListView: View {
                         }
                     }
             }
+            .onMove { offsets, destination in
+                state.pinStore.move(fromOffsets: offsets, toOffset: destination)
+            }
 
             ForEach(flatRows) { row in
                 switch row {

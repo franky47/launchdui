@@ -88,12 +88,12 @@
 - [x] `ServiceListView` — pinned rows above groups, context menus (Pin to Top / Unpin)
 - [x] Bundle ID change to `com.47ng.launchdui`
 
-### 5.2 Additional Interactions (pending)
-- [ ] Detail panel pin button (Actions container)
-- [ ] `P` keyboard shortcut
-- [ ] Drag reorder within pinned rows
+### 5.2 Additional Interactions
+- [x] Detail panel pin button (Actions container with tooltip)
+- [x] `P` keyboard shortcut (toggles pin on selected service)
+- [x] Drag reorder within pinned rows
 
 ---
 
 ## Current Focus
-**Phase 5.1 COMPLETE.** Core pinning with context menu, persistence, and list rendering.
+**Phase 5 COMPLETE.** Full pinning feature with persistence, context menus, detail panel button, keyboard shortcut, and drag reorder.
