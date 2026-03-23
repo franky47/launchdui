@@ -45,7 +45,7 @@ struct ServiceListView: View {
             statusFilterBar
             scheduleFilterBar
             Divider()
-            if state.groupedServices.isEmpty {
+            if state.pinnedServices.isEmpty && state.groupedServices.isEmpty {
                 Spacer()
                 if !state.searchText.isEmpty {
                     Text("No services matching \"\(state.searchText)\"")
@@ -124,6 +124,18 @@ struct ServiceListView: View {
 
     private var serviceList: some View {
         List(selection: $selectedRow) {
+            ForEach(state.pinnedServices) { service in
+                ServiceRow(service: service, isPinned: true)
+                    .tag(ListRowID.service(service.id))
+                    .contextMenu {
+                        Button {
+                            state.pinStore.unpin(label: service.label)
+                        } label: {
+                            Label("Unpin", systemImage: "pin.slash")
+                        }
+                    }
+            }
+
             ForEach(flatRows) { row in
                 switch row {
                 case .header(let source, let count, let isExpanded):
@@ -143,6 +155,13 @@ struct ServiceListView: View {
                 case .service(let service):
                     ServiceRow(service: service)
                         .tag(row.id)
+                        .contextMenu {
+                            Button {
+                                state.pinStore.pin(label: service.label)
+                            } label: {
+                                Label("Pin to Top", systemImage: "pin")
+                            }
+                        }
                 }
             }
         }
