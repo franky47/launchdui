@@ -212,6 +212,13 @@ struct ServiceListView: View {
             }
             return .ignored
         }
+        .onKeyPress(characters: CharacterSet(charactersIn: "p")) { _ in
+            if case .service(let id) = selectedRow {
+                state.pinStore.togglePin(label: id)
+                return .handled
+            }
+            return .ignored
+        }
     }
 }
 
