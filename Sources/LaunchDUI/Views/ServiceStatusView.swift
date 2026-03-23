@@ -3,6 +3,7 @@ import SwiftUI
 /// Top-right panel: service info, metadata, schedule, and copyable commands.
 struct ServiceStatusView: View {
     let service: LaunchdService
+    let pinStore: PinStore
 
     var body: some View {
         ScrollView {
@@ -28,17 +29,36 @@ struct ServiceStatusView: View {
 
                 Spacer()
 
-                StatusIndicator(status: service.status)
-                Text(service.status.displayName)
-                    .font(.callout)
-                    .fontWeight(.medium)
-                    .foregroundStyle(service.status.statusColor)
+                VStack(spacing: 4) {
+                    HStack(spacing: 4) {
+                        StatusIndicator(status: service.status)
+                        Text(service.status.displayName)
+                            .font(.callout)
+                            .fontWeight(.medium)
+                            .foregroundStyle(service.status.statusColor)
+                    }
+
+                    // Actions
+                    pinButton
+                }
             }
 
             Text(service.source.displayName)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    private var pinButton: some View {
+        Button {
+            pinStore.togglePin(label: service.label)
+        } label: {
+            Image(systemName: pinStore.isPinned(label: service.label) ? "pin.fill" : "pin")
+                .font(.callout)
+                .foregroundStyle(pinStore.isPinned(label: service.label) ? .primary : .secondary)
+        }
+        .buttonStyle(.borderless)
+        .help(pinStore.isPinned(label: service.label) ? "Unpin" : "Pin to top")
     }
 
     private var metadataSection: some View {

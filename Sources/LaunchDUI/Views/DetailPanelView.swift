@@ -3,12 +3,13 @@ import SwiftUI
 /// Right column: top/bottom vertical split with service status and plist inspector.
 struct DetailPanelView: View {
     let service: LaunchdService?
+    let pinStore: PinStore
     @State private var tabSelections: [String: PlistInspectorView.Tab] = [:]
 
     var body: some View {
         if let service {
             VSplitView {
-                ServiceStatusView(service: service)
+                ServiceStatusView(service: service, pinStore: pinStore)
                     .frame(minHeight: 200)
 
                 if let plist = service.plistContents {
