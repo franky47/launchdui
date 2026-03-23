@@ -78,5 +78,22 @@
 
 ---
 
+## Phase 5: Pinnable Services
+
+### 5.1 Core Pinning
+- [x] `PinStore.swift` — UserDefaults-backed pin persistence with ordered labels
+- [x] PinStore unit tests (9 tests)
+- [x] `AppState` integration — `pinnedServices` computed property, filters exclude pinned from groups
+- [x] `ServiceRow` pinned layout variant (badge + name, pin icon + bundle ID)
+- [x] `ServiceListView` — pinned rows above groups, context menus (Pin to Top / Unpin)
+- [x] Bundle ID change to `com.47ng.launchdui`
+
+### 5.2 Additional Interactions
+- [x] Detail panel pin button (Actions container with tooltip)
+- [x] `P` keyboard shortcut (toggles pin on selected service)
+- [x] Drag reorder within pinned rows
+
+---
+
 ## Current Focus
-**All phases COMPLETE.** App is fully functional.
+**Phase 5 COMPLETE.** Full pinning feature with persistence, context menus, detail panel button, keyboard shortcut, and drag reorder.

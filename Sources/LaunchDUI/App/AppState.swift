@@ -11,6 +11,7 @@ final class AppState {
     var isLoading: Bool = false
     var errorMessage: String?
 
+    let pinStore = PinStore()
     private let repository = ServiceRepository()
 
     /// Counts per status category across all services (unfiltered).
@@ -37,8 +38,31 @@ final class AppState {
         return counts
     }
 
+    /// Pinned services in user-defined order, filtered by current search/filters.
+    var pinnedServices: [LaunchdService] {
+        let filtered = applyFilters(to: services)
+        let pinnedSet = Set(pinStore.pinnedLabels)
+        let filteredPinned = filtered.filter { pinnedSet.contains($0.label) }
+        // Maintain pin order
+        return pinStore.pinnedLabels.compactMap { label in
+            filteredPinned.first { $0.label == label }
+        }
+    }
+
     /// Services grouped by source, filtered by search text, status, and schedule filters.
+    /// Excludes pinned services.
     var groupedServices: [(source: ServiceSource, services: [LaunchdService])] {
+        let pinnedSet = Set(pinStore.pinnedLabels)
+        let filtered = applyFilters(to: services).filter { !pinnedSet.contains($0.label) }
+
+        return ServiceSource.allCases.compactMap { source in
+            let group = filtered.filter { $0.source == source }
+            guard !group.isEmpty else { return nil }
+            return (source: source, services: group)
+        }
+    }
+
+    private func applyFilters(to services: [LaunchdService]) -> [LaunchdService] {
         var filtered = services
 
         if !searchText.isEmpty {
@@ -61,11 +85,7 @@ final class AppState {
             }
         }
 
-        return ServiceSource.allCases.compactMap { source in
-            let group = filtered.filter { $0.source == source }
-            guard !group.isEmpty else { return nil }
-            return (source: source, services: group)
-        }
+        return filtered
     }
 
     /// The currently selected service.

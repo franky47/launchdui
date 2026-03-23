@@ -10,7 +10,7 @@ struct ContentView: View {
             ServiceListView(state: state)
                 .frame(minWidth: 280, idealWidth: 320, maxWidth: 450)
 
-            DetailPanelView(service: state.selectedService)
+            DetailPanelView(service: state.selectedService, pinStore: state.pinStore)
                 .frame(minWidth: 400)
         }
         .frame(minWidth: 750, minHeight: 500)

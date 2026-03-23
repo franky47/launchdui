@@ -2,7 +2,7 @@
 set -euo pipefail
 
 APP_NAME="LaunchdUI"
-BUNDLE_ID="dev.launchdui.app"
+BUNDLE_ID="com.47ng.launchdui"
 BUILD_DIR=".build/release"
 APP_BUNDLE="$BUILD_DIR/$APP_NAME.app"
 
