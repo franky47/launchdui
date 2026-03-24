@@ -23,13 +23,21 @@ LaunchdUI never executes mutating `launchctl` commands. It only reads service da
 - macOS 15 (Sequoia) or later
 - Swift 6.0+ (included with Xcode 16+)
 
+## Install
+
+```bash
+./install.sh
+```
+
+This builds a release binary, bundles it as a `.app` with the icon, and copies it to `/Applications`.
+
 ## Build & Run
 
 ```bash
 # Run directly
 swift run LaunchdUI
 
-# Build a standalone .app bundle
+# Build a standalone .app bundle (without installing)
 ./scripts/bundle.sh
 open .build/release/LaunchdUI.app
 ```
