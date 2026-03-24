@@ -12,8 +12,12 @@ swift build -c release
 echo "Creating app bundle..."
 rm -rf "$APP_BUNDLE"
 mkdir -p "$APP_BUNDLE/Contents/MacOS"
+mkdir -p "$APP_BUNDLE/Contents/Resources"
 
 cp "$BUILD_DIR/$APP_NAME" "$APP_BUNDLE/Contents/MacOS/$APP_NAME"
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cp "$SCRIPT_DIR/../Resources/AppIcon.icns" "$APP_BUNDLE/Contents/Resources/AppIcon.icns"
 
 cat > "$APP_BUNDLE/Contents/Info.plist" << PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -36,6 +40,8 @@ cat > "$APP_BUNDLE/Contents/Info.plist" << PLIST
     <string>1.0</string>
     <key>LSMinimumSystemVersion</key>
     <string>15.0</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
 </dict>
