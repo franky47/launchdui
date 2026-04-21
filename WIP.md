@@ -67,7 +67,7 @@
 ## Phase 4: Runtime Log Viewer
 
 - [x] Extract `StandardOutPath`/`StandardErrorPath` from plist to `LaunchdService` model
-- [x] `PlistReader` extraction methods with readability checks in `ServiceRepository`
+- [x] `PlistReader` extraction methods (paths used regardless of file existence)
 - [x] `LogTailer` — efficient backward file reading (last 500 lines) + live streaming via DispatchSource
 - [x] `LogTabView` — monospaced log display with auto-scroll (pauses on scroll-up)
 - [x] Conditional Logs/Errors tabs in `PlistInspectorView`

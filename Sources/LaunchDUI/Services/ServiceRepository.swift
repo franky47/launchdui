@@ -86,11 +86,8 @@ actor ServiceRepository {
         let programArguments = dict["ProgramArguments"] as? [String]
         let plistContents = try? PlistReader.read(at: plistPath)
 
-        let fm = FileManager.default
         let stdoutPath = PlistReader.extractStandardOutPath(from: dict)
-            .flatMap { fm.isReadableFile(atPath: $0) ? $0 : nil }
         let stderrPath = PlistReader.extractStandardErrorPath(from: dict)
-            .flatMap { fm.isReadableFile(atPath: $0) ? $0 : nil }
 
         // Determine status
         let status: ServiceStatus
