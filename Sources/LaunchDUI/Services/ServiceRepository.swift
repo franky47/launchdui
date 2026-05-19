@@ -5,7 +5,9 @@ import Foundation
 actor ServiceRepository {
 
     /// Load all services from plist directories and merge with runtime state.
-    func loadAll() async throws -> [LaunchdService] {
+    /// When a `discoveryStore` is provided, reconciles its baseline against the
+    /// freshly-discovered service list as part of the same refresh.
+    func loadAll(discoveryStore: DiscoveryStore? = nil) async throws -> [LaunchdService] {
         // Phase 1: Bulk data (fast)
         async let runtimeEntries = LaunchctlClient.listServices()
         async let disabledSet = LaunchctlClient.disabledServices()
@@ -33,6 +35,13 @@ actor ServiceRepository {
                     services.append(service)
                 }
             }
+        }
+
+        if let discoveryStore {
+            let inputs = services.map {
+                DiscoveryStore.ServiceInput(label: $0.label, plistPath: $0.plistPath, source: $0.source)
+            }
+            await discoveryStore.reconcile(currentServices: inputs)
         }
 
         return services.sorted { $0.label.localizedCaseInsensitiveCompare($1.label) == .orderedAscending }

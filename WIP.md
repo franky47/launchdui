@@ -95,5 +95,20 @@
 
 ---
 
+---
+
+## Phase 6: Discovery Inbox
+
+### 6.1 Foundation (data layer + (new) badge)
+- [x] `DiscoveryRecord.swift` — Codable Sendable record with `firstSeenAt` / `readAt`
+- [x] `PlistBirthtimeReader.swift` — birthtime with mtime fallback, nil for missing files
+- [x] `DiscoveryStore.swift` — actor: load, reconcile, markRead, markAllRead, unreadLabels, firstSeen; JSON at `~/Library/Application Support/launchdui/discovery.json`; first-run backfill; corruption recovery; Apple-source auto-ack
+- [x] `ServiceRepository.loadAll` reconciles discovery store as part of the refresh flow
+- [x] `AppState` — `discoveryStore`, `unreadLabels`, `unreadCount`, `isUnread`, `markRead`, `markAllRead`
+- [x] `ServiceRow` — `(new)` pill badge in default + pinned layouts, dark-mode aware
+- [x] Tests: `DiscoveryStoreTests` (9), `PlistBirthtimeReaderTests` (2)
+
+---
+
 ## Current Focus
-**Phase 5 COMPLETE.** Full pinning feature with persistence, context menus, detail panel button, keyboard shortcut, and drag reorder.
+**Phase 6.1 COMPLETE.** Discovery foundation: services landing on disk after first run surface a `(new)` badge in the sidebar; baseline persists in Application Support.

@@ -126,7 +126,7 @@ struct ServiceListView: View {
         ScrollViewReader { proxy in
         List(selection: $selectedRow) {
             ForEach(state.pinnedServices) { service in
-                ServiceRow(service: service, isPinned: true)
+                ServiceRow(service: service, isPinned: true, isUnread: state.isUnread(label: service.label))
                     .tag(ListRowID.service(service.id))
                     .contextMenu {
                         Button {
@@ -157,7 +157,7 @@ struct ServiceListView: View {
                         }
 
                 case .service(let service):
-                    ServiceRow(service: service)
+                    ServiceRow(service: service, isUnread: state.isUnread(label: service.label))
                         .tag(row.id)
                         .contextMenu {
                             Button {

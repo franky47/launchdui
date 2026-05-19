@@ -12,7 +12,27 @@ final class AppState {
     var errorMessage: String?
 
     let pinStore = PinStore()
+    let discoveryStore = DiscoveryStore()
+    /// Cached so view code (`ServiceRow`) can ask `isUnread(label:)`
+    /// synchronously — actor hops are not allowed inside view bodies.
+    private(set) var unreadLabels: Set<String> = []
     private let repository = ServiceRepository()
+
+    var unreadCount: Int { unreadLabels.count }
+
+    func isUnread(label: String) -> Bool {
+        unreadLabels.contains(label)
+    }
+
+    func markRead(label: String) async {
+        await discoveryStore.markRead(label: label)
+        unreadLabels = await discoveryStore.unreadLabels()
+    }
+
+    func markAllRead() async {
+        await discoveryStore.markAllRead()
+        unreadLabels = await discoveryStore.unreadLabels()
+    }
 
     /// Counts per status category across all services (unfiltered).
     var statusCounts: [StatusFilter: Int] {
@@ -99,7 +119,8 @@ final class AppState {
         isLoading = true
         errorMessage = nil
         do {
-            services = try await repository.loadAll()
+            services = try await repository.loadAll(discoveryStore: discoveryStore)
+            unreadLabels = await discoveryStore.unreadLabels()
             await loadDetailForSelection()
         } catch {
             errorMessage = error.localizedDescription
