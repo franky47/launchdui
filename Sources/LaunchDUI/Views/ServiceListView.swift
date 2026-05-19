@@ -51,7 +51,9 @@ struct ServiceListView: View {
                 scheduleFilterBar
             }
             Divider()
-            if state.pinnedServices.isEmpty && state.groupedServices.isEmpty {
+            if state.unreadCount > 0 {
+                inboxList
+            } else if state.pinnedServices.isEmpty && state.groupedServices.isEmpty {
                 Spacer()
                 if !state.searchText.isEmpty {
                     Text("No services matching \"\(state.searchText)\"")
@@ -65,6 +67,33 @@ struct ServiceListView: View {
                 Spacer()
             } else {
                 serviceList
+            }
+        }
+    }
+
+    private var inboxList: some View {
+        let unread = state.unreadServices
+        return Group {
+            if unread.isEmpty {
+                Spacer()
+                Text("No new services matching \"\(state.searchText)\"")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer()
+            } else {
+                List(selection: $selectedRow) {
+                    ForEach(unread) { service in
+                        ServiceRow(service: service, isUnread: true)
+                            .tag(ListRowID.service(service.id))
+                    }
+                }
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
+                .onChange(of: selectedRow) { _, newValue in
+                    if case .service(let id) = newValue {
+                        state.selectedServiceID = id
+                    }
+                }
             }
         }
     }

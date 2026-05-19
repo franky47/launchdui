@@ -69,6 +69,19 @@ final class AppState {
         }
     }
 
+    /// Unread services with the current search text applied. Used by the
+    /// inbox-mode list, which ignores pin order, groups, and status/schedule
+    /// filters so the review pass is the only thing on screen.
+    var unreadServices: [LaunchdService] {
+        let filtered = services.filter { unreadLabels.contains($0.label) }
+        guard !searchText.isEmpty else { return filtered }
+        let query = searchText.lowercased()
+        return filtered.filter {
+            $0.label.lowercased().contains(query) ||
+            $0.displayName.lowercased().contains(query)
+        }
+    }
+
     /// Services grouped by source, filtered by search text, status, and schedule filters.
     /// Excludes pinned services.
     var groupedServices: [(source: ServiceSource, services: [LaunchdService])] {

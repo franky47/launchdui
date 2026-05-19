@@ -57,3 +57,7 @@ Reference by number from the parent PRD:
 - 101-test suite stays green; no new tests required (bean gates on manual verification only).
 
 Manual verification (filter bars hidden when inbox > 0, count stays global under search, bulk click clears everything and returns filter bars) is the user's gate — I cannot exercise the running UI.
+
+### Follow-up refinement (user-requested during verification)
+
+Inbox mode now narrows the list itself, not just the chrome: pinned section and source groups are hidden, and only unread services appear (still subject to the search field). Once the inbox is cleared, the full sidebar — pinned, groups, filter bars — returns. Backed by a new `AppState.unreadServices` computed property that applies the search filter to the unread set.
