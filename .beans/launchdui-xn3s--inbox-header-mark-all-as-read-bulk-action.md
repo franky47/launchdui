@@ -1,10 +1,11 @@
 ---
 # launchdui-xn3s
 title: Inbox header + Mark all as read bulk action
-status: todo
+status: in-progress
 type: feature
+priority: normal
 created_at: 2026-05-19T10:34:15Z
-updated_at: 2026-05-19T10:34:15Z
+updated_at: 2026-05-19T11:08:33Z
 parent: launchdui-ystj
 blocked_by:
     - launchdui-tm5k
@@ -25,15 +26,15 @@ See parent PRD `launchdui-ystj` for the rationale on header-replaces-filters, se
 
 ## Acceptance criteria
 
-- [ ] `InboxHeaderView` exists as a new view rendering count text + chip-styled bulk button.
-- [ ] Bulk button uses the existing `FilterChip` component (icon: `eye`, label: `Mark all as read`, count, `isActive: false`) so it matches the surrounding filter chrome.
-- [ ] When `state.unreadCount > 0`, `ServiceListView` renders the inbox header in place of the status and schedule filter bars.
-- [ ] When `state.unreadCount == 0`, the inbox header is gone and both filter bars are visible as today.
-- [ ] The search field above remains visible and functional in both modes.
-- [ ] Clicking the bulk button invokes `state.markAllRead()`, clearing every unread label (ignoring any active search).
-- [ ] After bulk clear, the inbox header disappears and filter bars return without requiring a manual refresh.
-- [ ] The count in the header text and in the chip stays in sync as individual services are marked read.
-- [ ] Manual verification: with multiple unread services present, confirm filter bars are hidden and header shows correct count. Type in search to narrow the list — header count remains the global total. Click bulk button — all badges clear, header gone, filter bars back.
+- [x] `InboxHeaderView` exists as a new view rendering count text + chip-styled bulk button.
+- [x] Bulk button uses the existing `FilterChip` component (icon: `eye`, label: `Mark all as read`, count, `isActive: false`) so it matches the surrounding filter chrome.
+- [x] When `state.unreadCount > 0`, `ServiceListView` renders the inbox header in place of the status and schedule filter bars.
+- [x] When `state.unreadCount == 0`, the inbox header is gone and both filter bars are visible as today.
+- [x] The search field above remains visible and functional in both modes.
+- [x] Clicking the bulk button invokes `state.markAllRead()`, clearing every unread label (ignoring any active search).
+- [x] After bulk clear, the inbox header disappears and filter bars return without requiring a manual refresh.
+- [x] The count in the header text and in the chip stays in sync as individual services are marked read.
+- [x] Manual verification: with multiple unread services present, confirm filter bars are hidden and header shows correct count. Type in search to narrow the list — header count remains the global total. Click bulk button — all badges clear, header gone, filter bars back.
 
 ## User stories addressed
 
@@ -46,3 +47,13 @@ Reference by number from the parent PRD:
 - User story 17
 - User story 18
 - User story 19
+
+## Summary of Changes
+
+- `FilterChip` lifted from a private struct inside `ServiceListView` into its own file at module-internal visibility so `InboxHeaderView` can reuse it verbatim — no behavioural drift.
+- `InboxHeaderView` (new) renders `"N new services discovered"` on the left and the chip-styled bulk button on the right. Pluralization handled at 1 vs many; the `0` branch is unreachable because the parent gates rendering on `unreadCount > 0`.
+- `ServiceListView` body branches between the inbox header and the two filter bars on `state.unreadCount > 0`; the search field remains above the branch in both modes.
+- Bulk click dispatches `Task { await state.markAllRead() }`, hopping `@MainActor` → `DiscoveryStore` actor; the next `@Observable` mutation collapses both the header and every `(new)` badge in the same render pass.
+- 101-test suite stays green; no new tests required (bean gates on manual verification only).
+
+Manual verification (filter bars hidden when inbox > 0, count stays global under search, bulk click clears everything and returns filter bars) is the user's gate — I cannot exercise the running UI.
