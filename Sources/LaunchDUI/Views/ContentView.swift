@@ -10,8 +10,17 @@ struct ContentView: View {
             ServiceListView(state: state)
                 .frame(minWidth: 280, idealWidth: 320, maxWidth: 450)
 
-            DetailPanelView(service: state.selectedService, pinStore: state.pinStore)
-                .frame(minWidth: 400)
+            let selected = state.selectedService
+            DetailPanelView(
+                service: selected,
+                pinStore: state.pinStore,
+                isUnread: selected.map { state.isUnread(label: $0.label) } ?? false,
+                markRead: {
+                    guard let label = selected?.label else { return }
+                    Task { await state.markRead(label: label) }
+                }
+            )
+            .frame(minWidth: 400)
         }
         .frame(minWidth: 750, minHeight: 500)
         .task {

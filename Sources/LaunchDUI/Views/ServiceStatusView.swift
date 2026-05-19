@@ -4,6 +4,8 @@ import SwiftUI
 struct ServiceStatusView: View {
     let service: LaunchdService
     let pinStore: PinStore
+    let isUnread: Bool
+    let markRead: () -> Void
 
     var body: some View {
         ScrollView {
@@ -38,8 +40,12 @@ struct ServiceStatusView: View {
                             .foregroundStyle(service.status.statusColor)
                     }
 
-                    // Actions
-                    pinButton
+                    HStack(spacing: 8) {
+                        if isUnread {
+                            markReadButton
+                        }
+                        pinButton
+                    }
                 }
             }
 
@@ -47,6 +53,16 @@ struct ServiceStatusView: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    private var markReadButton: some View {
+        Button(action: markRead) {
+            Image(systemName: "envelope.open")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+        }
+        .buttonStyle(.borderless)
+        .help("Mark as read")
     }
 
     private var pinButton: some View {

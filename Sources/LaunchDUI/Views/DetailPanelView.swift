@@ -4,12 +4,19 @@ import SwiftUI
 struct DetailPanelView: View {
     let service: LaunchdService?
     let pinStore: PinStore
+    let isUnread: Bool
+    let markRead: () -> Void
     @State private var tabSelections: [String: PlistInspectorView.Tab] = [:]
 
     var body: some View {
         if let service {
             VSplitView {
-                ServiceStatusView(service: service, pinStore: pinStore)
+                ServiceStatusView(
+                    service: service,
+                    pinStore: pinStore,
+                    isUnread: isUnread,
+                    markRead: markRead
+                )
                     .frame(minHeight: 200)
 
                 if let plist = service.plistContents {
