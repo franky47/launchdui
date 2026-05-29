@@ -23,6 +23,10 @@ struct LaunchdService: Sendable, Identifiable {
     /// Scheduling information extracted from the plist.
     var schedule: ServiceSchedule
 
+    /// Whether the service launches at load (boot/login) via `RunAtLoad`.
+    /// Orthogonal to `schedule` — a login launcher may also have a trigger.
+    var runAtLoad: Bool
+
     /// Raw plist content as a Sendable tree.
     var plistContents: PlistValue?
 

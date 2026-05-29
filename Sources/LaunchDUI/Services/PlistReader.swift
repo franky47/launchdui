@@ -63,6 +63,13 @@ struct PlistReader: Sendable {
         return .onDemand
     }
 
+    /// Extract whether the service launches at load (boot/login).
+    /// Orthogonal to `ServiceSchedule` — a service can both `RunAtLoad`
+    /// and have a timer/keepalive trigger.
+    static func extractRunAtLoad(from dict: [String: Any]) -> Bool {
+        dict["RunAtLoad"] as? Bool ?? false
+    }
+
     /// Extract the StandardOutPath from a plist dictionary.
     static func extractStandardOutPath(from dict: [String: Any]) -> String? {
         dict["StandardOutPath"] as? String

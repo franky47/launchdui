@@ -49,6 +49,7 @@ struct ServiceListView: View {
             } else {
                 statusFilterBar
                 scheduleFilterBar
+                loginFilterBar
             }
             Divider()
             if state.unreadCount > 0 {
@@ -155,6 +156,23 @@ struct ServiceListView: View {
             .padding(.horizontal, 8)
             .padding(.vertical, 2)
         }
+    }
+
+    private var loginFilterBar: some View {
+        HStack(spacing: 4) {
+            Image(systemName: "power")
+                .font(.caption2)
+                .foregroundStyle(state.showLoginOnly ? .primary : .secondary)
+            Text("Login only · \(state.loginCount)")
+                .font(.caption)
+            Spacer()
+            Toggle("Login only", isOn: $state.showLoginOnly)
+                .labelsHidden()
+                .toggleStyle(.switch)
+                .controlSize(.mini)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 2)
     }
 
     private var serviceList: some View {

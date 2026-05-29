@@ -116,5 +116,14 @@
 
 ---
 
+## Phase 7: Login Filter
+
+- [x] `LaunchdService.runAtLoad: Bool`, parsed via `PlistReader.extractRunAtLoad` (sibling to `extractSchedule`), threaded through `ServiceRepository`
+- [x] `AppState.showLoginOnly` (3rd filter dimension, AND-combined) + `loginCount` (unfiltered tally)
+- [x] Dedicated "Login only · {count}" switch row below the schedule filter bar in `ServiceListView`; hidden in inbox mode, ephemeral
+- [x] Tests: `PlistReader` RunAtLoad extraction (3), `AppState` login filter (2)
+
+---
+
 ## Current Focus
-**Phase 6 COMPLETE.** Discovery inbox shipped: `(new)` badges, detail-panel mark-as-read, inbox header + bulk clear, unread-only list narrowing. Option+R shortcut deferred (scrapped). Epic `launchdui-ystj` closed.
+**Phase 7 COMPLETE.** Login filter shipped: `RunAtLoad` is now an orthogonal boolean filter dimension surfaced as a switch row under the schedule chips, narrowing the list to boot/login launchers. Bean `launchdui-anpx` closed.

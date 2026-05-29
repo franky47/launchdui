@@ -91,6 +91,7 @@ actor ServiceRepository {
         }
 
         let schedule = PlistReader.extractSchedule(from: dict)
+        let runAtLoad = PlistReader.extractRunAtLoad(from: dict)
         let program = PlistReader.extractProgram(from: dict)
         let programArguments = dict["ProgramArguments"] as? [String]
         let plistContents = try? PlistReader.read(at: plistPath)
@@ -116,6 +117,7 @@ actor ServiceRepository {
             program: program,
             programArguments: programArguments,
             schedule: schedule,
+            runAtLoad: runAtLoad,
             plistContents: plistContents,
             detailedInfo: nil,
             standardOutPath: stdoutPath,

@@ -8,6 +8,7 @@ final class AppState {
     var searchText: String = ""
     var activeStatusFilters: Set<StatusFilter> = []
     var activeScheduleFilters: Set<ScheduleFilter> = []
+    var showLoginOnly: Bool = false
     var isLoading: Bool = false
     var errorMessage: String?
 
@@ -58,6 +59,12 @@ final class AppState {
         return counts
     }
 
+    /// Unfiltered tally of services that launch at load (`RunAtLoad`).
+    /// Drives the "Login only" toggle's label count.
+    var loginCount: Int {
+        services.count(where: \.runAtLoad)
+    }
+
     /// Pinned services in user-defined order, filtered by current search/filters.
     var pinnedServices: [LaunchdService] {
         let filtered = applyFilters(to: services)
@@ -82,8 +89,8 @@ final class AppState {
         }
     }
 
-    /// Services grouped by source, filtered by search text, status, and schedule filters.
-    /// Excludes pinned services.
+    /// Services grouped by source, filtered by search text, status, schedule,
+    /// and login filters. Excludes pinned services.
     var groupedServices: [(source: ServiceSource, services: [LaunchdService])] {
         let pinnedSet = Set(pinStore.pinnedLabels)
         let filtered = applyFilters(to: services).filter { !pinnedSet.contains($0.label) }
@@ -116,6 +123,10 @@ final class AppState {
             filtered = filtered.filter { service in
                 activeScheduleFilters.contains { $0.matches(service.schedule) }
             }
+        }
+
+        if showLoginOnly {
+            filtered = filtered.filter(\.runAtLoad)
         }
 
         return filtered

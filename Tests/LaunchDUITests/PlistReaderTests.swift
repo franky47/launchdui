@@ -109,6 +109,24 @@ struct PlistReaderTests {
         #expect(schedule == .onDemand)
     }
 
+    @Test("Extracts RunAtLoad: true when key is true")
+    func extractsRunAtLoadTrue() {
+        let dict: [String: Any] = ["RunAtLoad": true]
+        #expect(PlistReader.extractRunAtLoad(from: dict) == true)
+    }
+
+    @Test("Extracts RunAtLoad: false when key is absent")
+    func extractsRunAtLoadAbsent() {
+        let dict: [String: Any] = ["Label": "com.test"]
+        #expect(PlistReader.extractRunAtLoad(from: dict) == false)
+    }
+
+    @Test("Extracts RunAtLoad: false when key is explicitly false")
+    func extractsRunAtLoadFalse() {
+        let dict: [String: Any] = ["RunAtLoad": false]
+        #expect(PlistReader.extractRunAtLoad(from: dict) == false)
+    }
+
     @Test("Extracts program from Program key")
     func extractsProgramKey() {
         let dict: [String: Any] = ["Program": "/usr/bin/test"]
