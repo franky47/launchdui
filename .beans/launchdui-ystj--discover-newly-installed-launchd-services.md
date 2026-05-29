@@ -1,10 +1,11 @@
 ---
 # launchdui-ystj
 title: Discover newly installed launchd services
-status: todo
+status: completed
 type: epic
+priority: normal
 created_at: 2026-05-19T10:25:03Z
-updated_at: 2026-05-19T10:25:03Z
+updated_at: 2026-05-29T09:11:23Z
 ---
 
 ## Problem Statement

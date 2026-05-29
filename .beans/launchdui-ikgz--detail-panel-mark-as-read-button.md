@@ -1,11 +1,11 @@
 ---
 # launchdui-ikgz
 title: Detail-panel "Mark as read" button
-status: in-progress
+status: completed
 type: feature
 priority: normal
 created_at: 2026-05-19T10:33:54Z
-updated_at: 2026-05-19T11:05:15Z
+updated_at: 2026-05-29T09:11:14Z
 parent: launchdui-ystj
 blocked_by:
     - launchdui-tm5k

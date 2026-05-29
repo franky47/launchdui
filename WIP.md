@@ -108,7 +108,13 @@
 - [x] `ServiceRow` — `(new)` pill badge in default + pinned layouts, dark-mode aware
 - [x] Tests: `DiscoveryStoreTests` (9), `PlistBirthtimeReaderTests` (2)
 
+### 6.2 Read interactions
+- [x] Detail-panel "Mark as read" button (`ServiceStatusView` Actions container, shown only when unread)
+- [x] Inbox header replaces filter bars while `unreadCount > 0`; chip-styled "Mark all as read [N]"
+- [x] Inbox mode narrows the list to unread-only (`AppState.unreadServices`)
+- [~] ~~Option+R keyboard shortcut for Mark as read~~ — scrapped (deprioritized; bean `ia0n` kept as `scrapped`)
+
 ---
 
 ## Current Focus
-**Phase 6.1 COMPLETE.** Discovery foundation: services landing on disk after first run surface a `(new)` badge in the sidebar; baseline persists in Application Support.
+**Phase 6 COMPLETE.** Discovery inbox shipped: `(new)` badges, detail-panel mark-as-read, inbox header + bulk clear, unread-only list narrowing. Option+R shortcut deferred (scrapped). Epic `launchdui-ystj` closed.

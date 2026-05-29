@@ -1,11 +1,11 @@
 ---
 # launchdui-xn3s
 title: Inbox header + Mark all as read bulk action
-status: in-progress
+status: completed
 type: feature
 priority: normal
 created_at: 2026-05-19T10:34:15Z
-updated_at: 2026-05-19T11:08:33Z
+updated_at: 2026-05-29T09:11:14Z
 parent: launchdui-ystj
 blocked_by:
     - launchdui-tm5k

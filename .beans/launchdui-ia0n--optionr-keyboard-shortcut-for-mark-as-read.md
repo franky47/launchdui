@@ -1,10 +1,11 @@
 ---
 # launchdui-ia0n
 title: Option+R keyboard shortcut for Mark as read
-status: todo
+status: scrapped
 type: feature
+priority: normal
 created_at: 2026-05-19T10:34:36Z
-updated_at: 2026-05-19T10:34:36Z
+updated_at: 2026-05-29T09:11:14Z
 parent: launchdui-ystj
 blocked_by:
     - launchdui-ikgz
