@@ -159,17 +159,12 @@ struct ServiceListView: View {
     }
 
     private var loginFilterBar: some View {
-        HStack(spacing: 4) {
-            Image(systemName: "power")
-                .font(.caption2)
-                .foregroundStyle(state.showLoginOnly ? .primary : .secondary)
-            Text("Login only · \(state.loginCount)")
+        HStack(spacing: 8) {
+            Text("Startup")
                 .font(.caption)
+                .foregroundStyle(.secondary)
             Spacer()
-            Toggle("Login only", isOn: $state.showLoginOnly)
-                .labelsHidden()
-                .toggleStyle(.switch)
-                .controlSize(.mini)
+            LoginFilterControl(selection: $state.loginFilter) { state.loginFilterCount($0) }
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 2)
@@ -284,6 +279,64 @@ struct ServiceListView: View {
             }
         }
         } // ScrollViewReader
+    }
+}
+
+// MARK: - Login Filter Control
+
+/// Tri-state segmented control over the `RunAtLoad` dimension, styled to match
+/// the chip filter bars: rounded outer caps, square internal seams, inline
+/// counts. Exactly one segment is active (mutually exclusive).
+private struct LoginFilterControl: View {
+    @Binding var selection: LoginFilter
+    /// Unfiltered tally for a segment, supplied by the owner.
+    let count: (LoginFilter) -> Int
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(Array(LoginFilter.allCases.enumerated()), id: \.element) { index, filter in
+                segment(filter)
+                    .overlay(alignment: .leading) {
+                        if index > 0 {
+                            Rectangle()
+                                .fill(Color.secondary.opacity(0.3))
+                                .frame(width: 1)
+                        }
+                    }
+            }
+        }
+        .fixedSize()
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .overlay(
+            RoundedRectangle(cornerRadius: 6)
+                .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+        )
+    }
+
+    private func segment(_ filter: LoginFilter) -> some View {
+        let isActive = selection == filter
+        return Button {
+            selection = filter
+        } label: {
+            HStack(spacing: 4) {
+                if let icon = filter.icon {
+                    Image(systemName: icon)
+                        .font(.caption2)
+                        .foregroundStyle(isActive ? .primary : .secondary)
+                }
+                Text(filter.rawValue)
+                    .font(.caption)
+                Text("\(count(filter))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(isActive ? Color.accentColor.opacity(0.2) : .clear)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isActive ? [.isButton, .isSelected] : .isButton)
     }
 }
 

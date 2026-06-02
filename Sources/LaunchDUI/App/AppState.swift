@@ -8,7 +8,7 @@ final class AppState {
     var searchText: String = ""
     var activeStatusFilters: Set<StatusFilter> = []
     var activeScheduleFilters: Set<ScheduleFilter> = []
-    var showLoginOnly: Bool = false
+    var loginFilter: LoginFilter = .all
     var isLoading: Bool = false
     var errorMessage: String?
 
@@ -59,10 +59,10 @@ final class AppState {
         return counts
     }
 
-    /// Unfiltered tally of services that launch at load (`RunAtLoad`).
-    /// Drives the "Login only" toggle's label count.
-    var loginCount: Int {
-        services.count(where: \.runAtLoad)
+    /// Unfiltered tally of services matching a login-filter segment.
+    /// Drives the inline count on each segment (All / Login / Triggered).
+    func loginFilterCount(_ filter: LoginFilter) -> Int {
+        services.count { filter.matches(runAtLoad: $0.runAtLoad) }
     }
 
     /// Pinned services in user-defined order, filtered by current search/filters.
@@ -125,8 +125,8 @@ final class AppState {
             }
         }
 
-        if showLoginOnly {
-            filtered = filtered.filter(\.runAtLoad)
+        if loginFilter != .all {
+            filtered = filtered.filter { loginFilter.matches(runAtLoad: $0.runAtLoad) }
         }
 
         return filtered

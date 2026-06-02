@@ -23,30 +23,52 @@ struct AppStateLoginFilterTests {
         )
     }
 
-    @Test("loginCount tallies RunAtLoad services regardless of filter")
-    func loginCountIsUnfiltered() {
+    @Test("Per-segment counts are unfiltered tallies of the login dimension")
+    func segmentCountsAreUnfiltered() {
         let state = AppState()
         state.services = [
             service("com.a", runAtLoad: true),
             service("com.b", runAtLoad: false),
             service("com.c", runAtLoad: true),
         ]
-        #expect(state.loginCount == 2)
+        #expect(state.loginFilterCount(.all) == 3)
+        #expect(state.loginFilterCount(.login) == 2)
+        #expect(state.loginFilterCount(.triggered) == 1)
     }
 
-    @Test("showLoginOnly narrows grouped list to RunAtLoad services")
-    func showLoginOnlyNarrowsList() {
+    @Test("loginFilter .all shows every service")
+    func allShowsEverything() {
         let state = AppState()
         state.services = [
             service("com.a", runAtLoad: true),
             service("com.b", runAtLoad: false),
         ]
+        state.loginFilter = .all
+        let labels = state.groupedServices.flatMap { $0.services.map(\.label) }
+        #expect(labels.sorted() == ["com.a", "com.b"])
+    }
 
-        let allLabels = state.groupedServices.flatMap { $0.services.map(\.label) }
-        #expect(allLabels.sorted() == ["com.a", "com.b"])
+    @Test("loginFilter .login narrows to RunAtLoad services")
+    func loginNarrowsList() {
+        let state = AppState()
+        state.services = [
+            service("com.a", runAtLoad: true),
+            service("com.b", runAtLoad: false),
+        ]
+        state.loginFilter = .login
+        let labels = state.groupedServices.flatMap { $0.services.map(\.label) }
+        #expect(labels == ["com.a"])
+    }
 
-        state.showLoginOnly = true
-        let loginLabels = state.groupedServices.flatMap { $0.services.map(\.label) }
-        #expect(loginLabels == ["com.a"])
+    @Test("loginFilter .triggered narrows to non-RunAtLoad services")
+    func triggeredNarrowsList() {
+        let state = AppState()
+        state.services = [
+            service("com.a", runAtLoad: true),
+            service("com.b", runAtLoad: false),
+        ]
+        state.loginFilter = .triggered
+        let labels = state.groupedServices.flatMap { $0.services.map(\.label) }
+        #expect(labels == ["com.b"])
     }
 }
